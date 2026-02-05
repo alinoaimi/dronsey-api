@@ -1,0 +1,20 @@
+meta {
+  name: Get User
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3000/users/5
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MDI4ODY3NSwiZXhwIjoxNzcwODkzNDc1fQ.YUWRMdfjVXMdJpqNDNV_r5LQwggzy5odRp_b4etkAxI
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
