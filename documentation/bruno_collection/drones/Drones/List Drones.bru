@@ -1,0 +1,20 @@
+meta {
+  name: List Drones
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{api_url}}/drones
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin1_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

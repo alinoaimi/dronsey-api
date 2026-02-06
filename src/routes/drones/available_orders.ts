@@ -5,7 +5,7 @@ import { formatOrder } from "../../utils/formatters";
 
 export const getAvailableOrders = async (req: AuthRequest, res: Response): Promise<any> => {
     try {
-        // Available orders are those with status 'created' 
+        // Available orders are those with status 'available' 
         // AND not currently assigned to any drone (is_active = 1 in orders_drones)
         const availableOrders = await knex("orders")
             .select(
@@ -20,7 +20,7 @@ export const getAvailableOrders = async (req: AuthRequest, res: Response): Promi
                 knex.raw("ST_X(dropoff_location) as dropoff_lng"),
                 knex.raw("ST_Y(dropoff_location) as dropoff_lat")
             )
-            .where("status", "created")
+            .where("status", "available")
             .whereNotExists(function (this: any) {
                 this.select("*")
                     .from("orders_drones")

@@ -1,0 +1,30 @@
+meta {
+  name: Get Order
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{api_url}}/orders/93d60590-7edb-45e2-8c6b-cd00310d71b9
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin1_token}}
+}
+
+body:json {
+  {
+    "release_type": "broken",
+    "location": {
+      "lat": 51.5454984,
+      "lng": 54.45456
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

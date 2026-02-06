@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/auth";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import knex from "../../db";
 import { hashPassword } from "../../utils/password";
 import { formatUser } from "../../utils/formatters";
@@ -13,11 +13,6 @@ export const createUserValidation = [
 ];
 
 export const createUser = async (req: AuthRequest, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
     try {
         const { username, name, password, role = "user" } = req.body;
 

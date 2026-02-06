@@ -1,0 +1,30 @@
+meta {
+  name: Release Order
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{api_url}}/orders/27f8414d-c8e3-4f11-81c5-821b20eee655/release
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{drone1_token}}
+}
+
+body:json {
+  {
+    "release_type": "delivered",
+    "location": {
+      "lat": 51.5454984,
+      "lng": 54.45456
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Reserve Order
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api_url}}/orders/93d60590-7edb-45e2-8c6b-cd00310d71b9/reserve
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{drone1_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

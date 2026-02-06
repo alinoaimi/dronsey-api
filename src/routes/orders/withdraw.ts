@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/auth";
-import { param, validationResult } from "express-validator";
+import { param } from "express-validator";
 import knex from "../../db";
 
 export const withdrawOrderValidation = [
@@ -8,17 +8,12 @@ export const withdrawOrderValidation = [
 ];
 
 export const withdrawOrder = async (req: AuthRequest, res: Response): Promise<any> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
     try {
-        const orderId = req.params.id;
+        const orderIdOrUuid = req.params.id;
         const user = req.user!;
 
         // Fetch the order
-        const order = await knex("orders").where({ id: orderId }).orWhere({ order_uuid: orderId }).first();
+        const order = await knex("orders").where({ id: orderIdOrUuid }).orWhere({ order_uuid: orderIdOrUuid }).first();
 
         if (!order) {
             return res.status(404).json({ message: "Order not found" });

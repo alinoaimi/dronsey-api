@@ -1,0 +1,20 @@
+meta {
+  name: Pickup Order
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{api_url}}/orders/93d60590-7edb-45e2-8c6b-cd00310d71b9/pickup
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{drone1_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Get Drone
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{api_url}}/drones/1
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin1_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

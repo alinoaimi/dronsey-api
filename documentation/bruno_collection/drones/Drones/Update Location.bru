@@ -1,0 +1,29 @@
+meta {
+  name: Update Location
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/drones/location
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{drone1_token}}
+}
+
+body:json {
+  {
+    "location": {
+      "lat": 15.15646,
+      "lng": 65.51654
+    }
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

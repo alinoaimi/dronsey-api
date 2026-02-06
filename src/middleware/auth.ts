@@ -11,6 +11,7 @@ export interface AuthRequest extends Request {
         id: number;
         username: string;
         role: string;
+        drone_id?: number;
     };
 }
 
@@ -32,7 +33,7 @@ export const authCheck = (roles?: string | string[]) => {
             const knex = req.app.get("knex");
             const user = await knex("users")
                 .where({ id: decoded.id, is_active: true })
-                .select("id", "username", "role")
+                .select("id", "username", "role", "drone_id")
                 .first();
 
             if (!user) {
@@ -49,7 +50,8 @@ export const authCheck = (roles?: string | string[]) => {
             req.user = {
                 id: user.id,
                 username: user.username,
-                role: user.role
+                role: user.role,
+                drone_id: user.drone_id
             };
 
             if (roles) {

@@ -35,6 +35,11 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Welcome أهلاً وسهلاً Bienvenido Welcommenn");
 });
 
+// global error handler to never expose stack traces to users
+app.use((err: any, req: Request, res: Response, next: any) => {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+});
 
 // Start server
 app.listen(PORT, () => {
