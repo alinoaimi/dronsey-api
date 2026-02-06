@@ -5,7 +5,7 @@
 -- https://tableplus.com/
 --
 -- Database: mariadb
--- Generation Time: 2026-02-05 14:41:36.371345
+-- Generation Time: 2026-02-05 15:17:03.865748
 -- -------------------------------------------------------------
 
 -- Save current session settings and set optimal values for import
@@ -40,9 +40,10 @@ CREATE TABLE `orders` (
   `dropoff_location` point DEFAULT NULL,
   `pickup_address` longtext DEFAULT NULL COMMENT 'as JSON',
   `dropoff_address` longtext DEFAULT NULL COMMENT 'as JSON',
+  `status` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 CREATE TABLE `orders_drones` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -52,6 +53,7 @@ CREATE TABLE `orders_drones` (
   `deassign_time` bigint(20) unsigned DEFAULT NULL,
   `pickup_time` bigint(20) unsigned DEFAULT NULL,
   `release_time` bigint(20) unsigned DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
@@ -68,7 +70,7 @@ CREATE TABLE `users` (
   `drone_id` bigint(20) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_key` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- Restore original session settings

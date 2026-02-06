@@ -1,0 +1,35 @@
+meta {
+  name: Create Order
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{user1_token}}
+}
+
+body:json {
+  {
+    "pickup_location": {
+      "lat": 26.234626,
+      "lng": 50.552847
+    },
+    "dropoff_location": {
+      "lat": 26.269715,
+      "lng": 50.626022
+    },
+    "pickup_address": "123, test highway, Manama, Bahrain",
+    "dropoff_address": "456, some road, Bahrain"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

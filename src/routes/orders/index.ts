@@ -1,16 +1,14 @@
-import { Router, Response } from "express";
-import { AuthRequest, authCheck } from "../../middleware/auth";
-
+import { Router } from "express";
+import { authCheck } from "../../middleware/auth";
+import { createOrder, createOrderValidation } from "./create";
+import { withdrawOrder, withdrawOrderValidation } from "./withdraw";
 
 const router = Router();
 
-// // GET /orders/:id
-// router.get("/:id", authCheck(), getUser);
-
-// // PUT /orders/:id
-// router.put("/:id", authCheck(["admin"]), updateUser);
-
 // POST /orders
-router.post("/", authCheck(["admin"]), createOrder);
+router.post("/", authCheck(["user"]), createOrderValidation, createOrder);
+
+// POST /orders/:id/withdraw
+router.post("/:id/withdraw", authCheck(["admin", "user"]), withdrawOrderValidation, withdrawOrder);
 
 export default router;

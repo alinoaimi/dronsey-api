@@ -1,17 +1,17 @@
 meta {
-  name: Get User (me)
+  name: Available Orders
   type: http
   seq: 1
 }
 
 get {
-  url: {{api_url}}/users/me
+  url: http://localhost:3000/drones/available_orders
   body: none
   auth: bearer
 }
 
 auth:bearer {
-  token: {{admin1_token}}
+  token: {{drone1_token}}
 }
 
 settings {

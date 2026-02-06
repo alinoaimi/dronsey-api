@@ -1,0 +1,29 @@
+meta {
+  name: Create User
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{api_url}}/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin1_token}}
+}
+
+body:json {
+  {
+    "username": "drone1",
+    "name": "Drone 1",
+    "password": "123456789",
+    "role": "drone"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

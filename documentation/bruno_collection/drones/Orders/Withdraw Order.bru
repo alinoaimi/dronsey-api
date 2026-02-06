@@ -1,0 +1,20 @@
+meta {
+  name: Withdraw Order
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/orders/a149e044-d4c8-4927-820c-9c07575cbb3e/withdraw
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{user1_token}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

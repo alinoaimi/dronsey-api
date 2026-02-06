@@ -1,5 +1,6 @@
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/auth";
+import { formatUser } from "../../utils/formatters";
 
 export const getUser = async (req: AuthRequest, res: Response) => {
     try {
@@ -32,7 +33,7 @@ export const getUser = async (req: AuthRequest, res: Response) => {
             return;
         }
 
-        res.json(user);
+        res.json(formatUser(user));
 
     } catch (error) {
         console.error(error);

@@ -15,7 +15,7 @@ export interface AuthRequest extends Request {
 }
 
 export const authCheck = (roles?: string | string[]) => {
-    return (req: AuthRequest, res: Response, next: NextFunction) => {
+    return async (req: AuthRequest, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -27,11 +27,34 @@ export const authCheck = (roles?: string | string[]) => {
 
         try {
             const decoded = jwt.verify(token, JWT_SECRET) as any;
-            req.user = decoded;
+
+            // verify user exists in database with matching role
+            const knex = req.app.get("knex");
+            const user = await knex("users")
+                .where({ id: decoded.id, is_active: true })
+                .select("id", "username", "role")
+                .first();
+
+            if (!user) {
+                res.status(401).json({ error: "User not found or inactive" });
+                return;
+            }
+
+            // verify the role in JWT matches the record in the database
+            if (user.role !== decoded.role) {
+                res.status(401).json({ error: "Token role mismatch. Please login again." });
+                return;
+            }
+
+            req.user = {
+                id: user.id,
+                username: user.username,
+                role: user.role
+            };
 
             if (roles) {
                 const requiredRoles = Array.isArray(roles) ? roles : [roles];
-                if (!requiredRoles.includes(decoded.role)) {
+                if (!requiredRoles.includes(user.role)) {
                     res.status(403).json({ error: "Access denied. Insufficient permissions." });
                     return;
                 }

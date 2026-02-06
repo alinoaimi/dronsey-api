@@ -11,21 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Database connection
-const knex = require("knex")({
-    client: "mysql2",
-    connection: {
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME,
-        charset: "utf8mb4",
-    },
-    pool: {
-        min: 0,
-        max: 7
-    }
-});
+import knex from "./db";
 app.set("knex", knex);
 
 // Routes
@@ -40,6 +26,10 @@ app.use("/users", userRoutes);
 // -- Orders
 import orderRoutes from "./routes/orders";
 app.use("/orders", orderRoutes);
+
+// -- Drones
+import droneRoutes from "./routes/drones";
+app.use("/drones", droneRoutes);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Welcome أهلاً وسهلاً Bienvenido Welcommenn");

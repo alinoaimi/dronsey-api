@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/auth";
 import { hashPassword } from "../../utils/password";
+import { formatUser } from "../../utils/formatters";
 
 export const updateUser = async (req: AuthRequest, res: Response) => {
     try {
@@ -43,10 +44,10 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
         // Fetch updated
         const updatedUser = await knex("users")
             .where({ id })
-            .select("id", "username", "name", "role", "is_active", "create_time", "update_time")
+            .select("id", "username", "name", "role", "is_active", "create_time", "update_time", "drone_id")
             .first();
 
-        res.json(updatedUser);
+        res.json(formatUser(updatedUser));
 
     } catch (error) {
         console.error(error);
