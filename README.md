@@ -23,11 +23,13 @@
 
 ## Features
 
-✈️ **Real-time Tracking** — Live drone and order tracking via Socket.io  
-🔄 **Failure Recovery** — Automatic handoff when drones fail mid-delivery  
-🔐 **Role-based Access** — JWT authentication with Admin, User, and Drone roles  
-📍 **Spatial Support** — Location tracking using MariaDB's native POINT types  
-📝 **Full Audit Trail** — All actions logged in the `activity_log` table
+| | Feature | Description |
+|:-:|---------|-------------|
+| ✈️ | **Real-time Tracking** | Live drone and order tracking via Socket.io |
+| 🔄 | **Failure Recovery** | Automatic handoff when drones fail mid-delivery |
+| 🔐 | **Role-based Access** | JWT authentication with Admin, User, and Drone roles |
+| 📍 | **Spatial Support** | Location tracking using MariaDB's native POINT types |
+| 📝 | **Full Audit Trail** | All actions logged in the `activity_log` table |
 
 
 
@@ -60,7 +62,7 @@
 ### 1. Clone & Install
 
 ```bash
-git clone <repo_url>
+git clone https://github.com/alinoaimi/dronsey-api.git
 cd drones
 npm install
 ```
@@ -184,15 +186,12 @@ For detailed request/response examples, see the Bruno and Postman collections in
 
 ### Recommended Test Flow
 
-1. **Auth** — Log in as `admin`, `user`, and `drone` to get tokens
-2. **User** — Create an order (`POST /orders`)
-3. **Drone** — Reserve the order (`POST /orders/:id/reserve`)
-4. **Drone** — Pick it up (`POST /orders/:id/pickup`)
-5. **Simulate Failure** — Call `POST /orders/:id/release` with body:
-   ```json
-   { "release_type": "broken", "latitude": 25.123, "longitude": 55.456 }
-   ```
-6. **Verify** — List orders (`GET /orders`). The order is now `available` at the new coordinates.
+1. **Auth**: Log in as `admin`, `user`, and `drone` to get tokens
+2. **User**: Create an order (`POST /orders`)
+3. **Drone**: Reserve the order (`POST /orders/:id/reserve`)
+4. **Drone**: Pick it up (`POST /orders/:id/pickup`)
+5. **Simulate Failure**: Call `POST /orders/:id/release` with release type: "broken"
+6. **Verify** : List orders (`GET /orders`). The order is now `available` with updated pickup location
 
 ### The "Broken Drone" Handoff
 
@@ -209,8 +208,8 @@ When a drone reports a failure during delivery (`POST /orders/:id/release` with 
 npm test
 ```
 
----
 
 ## Considerations
 
 To keep the project simple, location history is stored in the MariaDB database. In a production environment, this can lead to performance issues at scale. For real-world use, a different database type should be used for storing location history.
+
