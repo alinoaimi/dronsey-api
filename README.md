@@ -4,7 +4,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
 ![MariaDB](https://img.shields.io/badge/MariaDB-10.2%2B-003545?logo=mariadb&logoColor=white)
 
-> A real-time drone delivery management system with intelligent failure recovery, role-based access control, and live tracking capabilities.
+> A real-time drone delivery management system with failure recovery logic, role-based access control, and live tracking capabilities.
 
 ---
 
@@ -24,7 +24,7 @@
 ## Features
 
 ✈️ **Real-time Tracking** — Live drone and order tracking via Socket.io  
-🔄 **Intelligent Failure Recovery** — Automatic handoff when drones fail mid-delivery  
+🔄 **Failure Recovery** — Automatic handoff when drones fail mid-delivery  
 🔐 **Role-based Access** — JWT authentication with Admin, User, and Drone roles  
 📍 **Spatial Support** — Location tracking using MariaDB's native POINT types  
 📝 **Full Audit Trail** — All actions logged in the `activity_log` table
