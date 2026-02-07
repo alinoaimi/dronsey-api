@@ -4,6 +4,7 @@ import { body } from "express-validator";
 import knex from "../../db";
 import { hashPassword } from "../../utils/password";
 import { formatUser } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
 
 export const createUserValidation = [
     body("username").isString().notEmpty().withMessage("Username is required"),
@@ -51,6 +52,15 @@ export const createUser = async (req: AuthRequest, res: Response): Promise<any> 
             .select("id", "username", "name", "role", "is_active", "create_time", "update_time", "drone_id")
             .where({ id: userId })
             .first();
+
+        await logActivity({
+            userId: req.user?.id,
+            action: "user.create",
+            entityType: "user",
+            entityId: userId,
+            details: { username, role },
+            req
+        });
 
         res.status(201).json({
             message: "User created successfully",

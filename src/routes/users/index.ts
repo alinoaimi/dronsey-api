@@ -5,10 +5,15 @@ import { getUser } from "./get";
 import { updateUser } from "./update";
 import { createUser, createUserValidation } from "./create";
 
+import { listUsers } from "./list";
+
 const router = Router();
 
 // GET /users/:id or /users/me
 router.get("/:id", authCheck(), getUser);
+
+// GET /users
+router.get("/", authCheck("admin"), listUsers);
 
 // PUT /users/:id
 router.put("/:id", authCheck(["admin"]), updateUser);

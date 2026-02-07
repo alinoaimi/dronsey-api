@@ -9,6 +9,13 @@ import { updateDroneHandler, updateDroneValidation } from "./update";
 
 const router = Router();
 
+// GET /drones/available_orders
+// Allowing drones and admins to view available orders
+router.get("/available_orders", authCheck(["drone", "admin"]), getAvailableOrders);
+
+// POST /drones/location
+router.post("/location", authCheck(["drone"]), updateLocationValidation, validate, updateLocation);
+
 // GET /drones - List all drones (admin only)
 router.get("/", authCheck(["admin"]), listDrones);
 
@@ -17,12 +24,5 @@ router.get("/:id", authCheck(["admin"]), getDroneValidation, validate, getDroneH
 
 // PUT /drones/:id - Update drone status (admin only)
 router.put("/:id", authCheck(["admin"]), updateDroneValidation, validate, updateDroneHandler);
-
-// GET /drones/available_orders
-// Allowing drones and admins to view available orders
-router.get("/available_orders", authCheck(["drone", "admin"]), getAvailableOrders);
-
-// POST /drones/location
-router.post("/location", authCheck(["drone"]), updateLocationValidation, validate, updateLocation);
 
 export default router;

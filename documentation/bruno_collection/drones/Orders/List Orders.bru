@@ -1,17 +1,17 @@
 meta {
-  name: Create Order
+  name: List Orders
   type: http
-  seq: 1
+  seq: 8
 }
 
-post {
+get {
   url: {{api_url}}/orders
-  body: json
+  body: none
   auth: bearer
 }
 
 auth:bearer {
-  token: {{user1_token}}
+  token: {{admin1_token}}
 }
 
 body:json {
@@ -24,7 +24,7 @@ body:json {
       "lat": 26.269715,
       "lng": 50.626022
     },
-    "pickup_address": "123, test highway, Manama, Bahrain",
+    "pickup_address": "555, test highway, Manama, Bahrain",
     "dropoff_address": "456, some road, Bahrain"
   }
 }

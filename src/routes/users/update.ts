@@ -2,6 +2,7 @@ import { Response } from "express";
 import { AuthRequest } from "../../middleware/auth";
 import { hashPassword } from "../../utils/password";
 import { formatUser } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
 
 export const updateUser = async (req: AuthRequest, res: Response) => {
     try {
@@ -46,6 +47,15 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
             .where({ id })
             .select("id", "username", "name", "role", "is_active", "create_time", "update_time", "drone_id")
             .first();
+
+        await logActivity({
+            userId: req.user?.id,
+            action: "user.update",
+            entityType: "user",
+            entityId: parseInt(id as string),
+            details: { fieldsUpdated: Object.keys(updates).filter(k => k !== 'update_time') },
+            req
+        });
 
         res.json(formatUser(updatedUser));
 

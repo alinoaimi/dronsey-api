@@ -3,6 +3,8 @@ import { AuthRequest } from "../../middleware/auth";
 import { body } from "express-validator";
 import knex from "../../db";
 import { getDrone } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
+import { emitOrderLocation, emitDroneLocation } from "../../socketio";
 
 export const updateLocationValidation = [
     body("location").isObject().withMessage("Location must be an object {lat, lng}"),
@@ -48,6 +50,22 @@ export const updateLocation = async (req: AuthRequest, res: Response): Promise<a
             location: locationPoint,
             create_time: Date.now()
         });
+
+        await logActivity({
+            userId: user.id,
+            action: "drone.location_update",
+            entityType: "drone",
+            entityId: droneId,
+            details: { location, order_id: orderId },
+            req
+        });
+
+        // emit location updates via sockets
+        const drone = await getDrone(droneId);
+        emitDroneLocation(droneId, location, drone?.status || "unknown");
+        if (orderId) {
+            emitOrderLocation(orderId, location);
+        }
 
         res.status(200).json({
             message: "Location updated successfully",

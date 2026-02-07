@@ -2,6 +2,8 @@ import { Response } from "express";
 import { AuthRequest } from "../../middleware/auth";
 import { param } from "express-validator";
 import knex from "../../db";
+import { logActivity } from "../../utils/activity_log";
+import { emitOrderWithdrawn } from "../../socketio";
 
 export const withdrawOrderValidation = [
     param("id").exists().withMessage("Order ID is required"),
@@ -52,6 +54,19 @@ export const withdrawOrder = async (req: AuthRequest, res: Response): Promise<an
                     .update({ status: "available" });
             }
         });
+
+        await logActivity({
+            userId: user.id,
+            action: "order.withdraw",
+            entityType: "order",
+            entityId: order.id,
+            req
+        });
+
+        // notify assigned drones via sockets
+        for (const droneId of activeDroneIds) {
+            emitOrderWithdrawn(droneId, order.id);
+        }
 
         res.status(200).json({ message: "Order withdrawn successfully" });
 

@@ -4,6 +4,7 @@ import { body } from "express-validator";
 import { v4 as uuidv4 } from "uuid";
 import knex from "../../db";
 import { getOrder } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
 
 export const createOrderValidation = [
     body("pickup_location").isObject().withMessage("Pickup location must be an object {lat, lng}"),
@@ -22,8 +23,7 @@ export const createOrder = async (req: AuthRequest, res: Response): Promise<any>
         const user_id = req.user?.id;
         const order_uuid = uuidv4();
 
-        // Prepare data for insertion
-        // Note: POINT(lng lat) is the standard OGC WKT format for spatial data
+        // POINT takes (lng, lat) not (lat, lng) 
         const pickupPoint = knex.raw("POINT(?, ?)", [pickup_location.lng, pickup_location.lat]);
         const dropoffPoint = knex.raw("POINT(?, ?)", [dropoff_location.lng, dropoff_location.lat]);
 
@@ -39,6 +39,15 @@ export const createOrder = async (req: AuthRequest, res: Response): Promise<any>
             pickup_address: pickupJson,
             dropoff_address: dropoffJson,
             status: "available"
+        });
+
+        await logActivity({
+            userId: user_id,
+            action: "order.create",
+            entityType: "order",
+            entityId: id,
+            details: { pickup_address, dropoff_address },
+            req
         });
 
         res.status(201).json({

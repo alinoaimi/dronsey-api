@@ -3,6 +3,7 @@ import { AuthRequest } from "../../middleware/auth";
 import { param } from "express-validator";
 import knex from "../../db";
 import { getOrder } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
 
 export const reserveOrderValidation = [
     param("id").exists().withMessage("Order ID is required"),
@@ -59,6 +60,15 @@ export const reserveOrder = async (req: AuthRequest, res: Response): Promise<any
             await trx("drones")
                 .where({ id: droneId })
                 .update({ status: "busy" });
+        });
+
+        await logActivity({
+            userId: user.id,
+            action: "order.reserve",
+            entityType: "order",
+            entityId: order.id,
+            details: { drone_id: droneId },
+            req
         });
 
         res.status(200).json({

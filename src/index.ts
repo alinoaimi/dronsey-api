@@ -1,12 +1,21 @@
 import express, { Request, Response } from "express";
+import { createServer } from "http";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+const httpServer = createServer(app);
 const PORT = process.env.PORT || 3000;
 
+// Socket.io
+import { initSocketIO } from "./socketio";
+initSocketIO(httpServer);
+
+
 // Middleware
+app.use(cors()); // temporarily for testing, to be properly setup in production
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -41,9 +50,11 @@ app.use((err: any, req: Request, res: Response, next: any) => {
     res.status(500).json({ error: "Internal server error" });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`API running on http://localhost:${PORT}`);
-});
+// start server only when run directly (not when imported for tests)
+if (require.main === module) {
+    httpServer.listen(PORT, () => {
+        console.log(`API running on http://localhost:${PORT}`);
+    });
+}
 
 export default app;

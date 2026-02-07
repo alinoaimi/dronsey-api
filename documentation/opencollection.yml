@@ -1,0 +1,400 @@
+opencollection: 1.0.0
+info:
+  name: drones
+config:
+  environments:
+    - name: drones
+      variables:
+        - name: api_url
+          value: http://localhost:8000
+        - name: admin1_token
+          value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MDM4MDg3MywiZXhwIjoxNzcwOTg1NjczfQ.VYG2rzs11O0fkEnV-lGxoqEuMkuMy2cdEYFrb2FgqD8
+        - name: user1_token
+          value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAsInVzZXJuYW1lIjoidXNlcjEiLCJyb2xlIjoidXNlciIsImlhdCI6MTc3MDM4MDgxMywiZXhwIjoxNzcwOTg1NjEzfQ.GIj6mYHIvbkHYzOXfW4BoNiPxhN0n9D9TF3w-2L8oVk
+        - name: drone1_token
+          value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInVzZXJuYW1lIjoiZHJvbmUxIiwicm9sZSI6ImRyb25lIiwiaWF0IjoxNzcwMzgyNzM5LCJleHAiOjE3NzA5ODc1Mzl9.F2VhDnobcIfg_kObVAyM_59ba1z2Je6BpXuFqg62_Aw
+items:
+  - info:
+      name: Auth
+      type: folder
+      seq: 1
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Login
+          type: http
+          seq: 1
+        http:
+          method: POST
+          url: '{{api_url}}/auth'
+          body:
+            type: json
+            data: |-
+              {
+                "username": "drone1",
+                "password": "123456789"
+              }
+          auth: inherit
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: Drones
+      type: folder
+      seq: 4
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Available Orders
+          type: http
+          seq: 1
+        http:
+          method: GET
+          url: '{{api_url}}/drones/available_orders'
+          auth:
+            type: bearer
+            token: '{{drone1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Update Location
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: '{{api_url}}/drones/location'
+          body:
+            type: json
+            data: |-
+              {
+                "location": {
+                  "lat": 15.15646,
+                  "lng": 65.51654
+                }
+              }
+          auth:
+            type: bearer
+            token: '{{drone1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: List Drones
+          type: http
+          seq: 3
+        http:
+          method: GET
+          url: '{{api_url}}/drones'
+          auth:
+            type: bearer
+            token: '{{admin1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Get Drone
+          type: http
+          seq: 4
+        http:
+          method: GET
+          url: '{{api_url}}/drones/1'
+          auth:
+            type: bearer
+            token: '{{admin1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Update Drone
+          type: http
+          seq: 5
+        http:
+          method: PUT
+          url: '{{api_url}}/drones/1'
+          body:
+            type: json
+            data: |-
+              {
+                "status": "available"
+              }
+          auth:
+            type: bearer
+            token: '{{admin1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: Orders
+      type: folder
+      seq: 3
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Create Order
+          type: http
+          seq: 1
+        http:
+          method: POST
+          url: '{{api_url}}/orders'
+          body:
+            type: json
+            data: |-
+              {
+                "pickup_location": {
+                  "lat": 26.234626,
+                  "lng": 50.552847
+                },
+                "dropoff_location": {
+                  "lat": 26.269715,
+                  "lng": 50.626022
+                },
+                "pickup_address": "123, test highway, Manama, Bahrain",
+                "dropoff_address": "456, some road, Bahrain"
+              }
+          auth:
+            type: bearer
+            token: '{{user1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Withdraw Order
+          type: http
+          seq: 2
+        http:
+          method: POST
+          url: '{{api_url}}/orders/cf643dea-80a7-44ca-a1ca-abf2e0b8faae/withdraw'
+          body:
+            type: json
+            data: ''
+          auth:
+            type: bearer
+            token: '{{user1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Reserve Order
+          type: http
+          seq: 3
+        http:
+          method: POST
+          url: '{{api_url}}/orders/93d60590-7edb-45e2-8c6b-cd00310d71b9/reserve'
+          auth:
+            type: bearer
+            token: '{{drone1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Pickup Order
+          type: http
+          seq: 4
+        http:
+          method: POST
+          url: '{{api_url}}/orders/93d60590-7edb-45e2-8c6b-cd00310d71b9/pickup'
+          auth:
+            type: bearer
+            token: '{{drone1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Release Order
+          type: http
+          seq: 5
+        http:
+          method: POST
+          url: '{{api_url}}/orders/27f8414d-c8e3-4f11-81c5-821b20eee655/release'
+          body:
+            type: json
+            data: |-
+              {
+                "release_type": "delivered",
+                "location": {
+                  "lat": 51.5454984,
+                  "lng": 54.45456
+                }
+              }
+          auth:
+            type: bearer
+            token: '{{drone1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Get Order
+          type: http
+          seq: 6
+        http:
+          method: GET
+          url: '{{api_url}}/orders/3cc3dba5-88a7-4b95-b947-68fb021ffe0b'
+          auth:
+            type: bearer
+            token: '{{user1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Update Order
+          type: http
+          seq: 7
+        http:
+          method: PUT
+          url: '{{api_url}}/orders/24'
+          body:
+            type: json
+            data: |-
+              {
+                "pickup_location": {
+                  "lat": 26.234626,
+                  "lng": 50.552847
+                },
+                "dropoff_location": {
+                  "lat": 26.269715,
+                  "lng": 50.626022
+                },
+                "pickup_address": "555, test highway, Manama, Bahrain",
+                "dropoff_address": "456, some road, Bahrain"
+              }
+          auth:
+            type: bearer
+            token: '{{admin1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: List Orders
+          type: http
+          seq: 8
+        http:
+          method: GET
+          url: '{{api_url}}/orders'
+          auth:
+            type: bearer
+            token: '{{admin1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+  - info:
+      name: Users
+      type: folder
+      seq: 2
+    request:
+      auth: inherit
+    items:
+      - info:
+          name: Create User
+          type: http
+          seq: 4
+        http:
+          method: POST
+          url: '{{api_url}}/users'
+          body:
+            type: json
+            data: |-
+              {
+                "username": "drone1",
+                "name": "Drone 1",
+                "password": "123456789",
+                "role": "drone"
+              }
+          auth:
+            type: bearer
+            token: '{{admin1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Get User (me)
+          type: http
+          seq: 1
+        http:
+          method: GET
+          url: '{{api_url}}/users/me'
+          auth:
+            type: bearer
+            token: '{{admin1_token}}'
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Get User
+          type: http
+          seq: 2
+        http:
+          method: GET
+          url: '{{api_url}}/users/5'
+          auth:
+            type: bearer
+            token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MDI4ODY3NSwiZXhwIjoxNzcwODkzNDc1fQ.YUWRMdfjVXMdJpqNDNV_r5LQwggzy5odRp_b4etkAxI
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+      - info:
+          name: Update User
+          type: http
+          seq: 3
+        http:
+          method: PUT
+          url: '{{api_url}}/users/1'
+          body:
+            type: json
+            data: |-
+              {
+                "name": "Administrator"
+              }
+          auth:
+            type: bearer
+            token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MDI4ODY3NSwiZXhwIjoxNzcwODkzNDc1fQ.YUWRMdfjVXMdJpqNDNV_r5LQwggzy5odRp_b4etkAxI
+        settings:
+          encodeUrl: true
+          timeout: 0
+          followRedirects: true
+          maxRedirects: 5
+bundled: true
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git
+    exportedAt: '2026-02-06T21:56:42.820Z'
+    exportedUsing: Bruno/3.0.2

@@ -3,6 +3,7 @@ import { AuthRequest } from "../../middleware/auth";
 import { param } from "express-validator";
 import knex from "../../db";
 import { getOrder } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
 
 export const pickupOrderValidation = [
     param("id").exists().withMessage("Order ID is required"),
@@ -51,6 +52,15 @@ export const pickupOrder = async (req: AuthRequest, res: Response): Promise<any>
         await knex("orders_drones")
             .where({ id: assignment.id })
             .update({ pickup_time: Date.now() });
+
+        await logActivity({
+            userId: user.id,
+            action: "order.pickup",
+            entityType: "order",
+            entityId: order.id,
+            details: { drone_id: droneId },
+            req
+        });
 
         res.status(200).json({
             message: "Order picked up successfully",

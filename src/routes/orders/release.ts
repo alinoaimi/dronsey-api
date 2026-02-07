@@ -3,6 +3,7 @@ import { AuthRequest } from "../../middleware/auth";
 import { param, body } from "express-validator";
 import knex from "../../db";
 import { getOrder } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
 
 export const releaseOrderValidation = [
     param("id").exists().withMessage("Order ID is required"),
@@ -48,14 +49,30 @@ export const releaseOrder = async (req: AuthRequest, res: Response): Promise<any
         }
 
         // determine statuses based on release type
-        const orderStatus = release_type === "delivered" ? "delivered" : "failed";
-        const droneStatus = release_type === "delivered" ? "available" : "broken";
         const releasePoint = knex.raw("POINT(?, ?)", [location.lng, location.lat]);
 
-        // release the order
-        await knex("orders")
-            .where({ id: order.id })
-            .update({ status: orderStatus });
+        if (release_type === "delivered") {
+            // normal delivery
+            await knex("orders")
+                .where({ id: order.id })
+                .update({ status: "delivered" });
+
+            await knex("drones")
+                .where({ id: droneId })
+                .update({ status: "available" });
+        } else {
+            // broken drone - make order available for pickup by another drone
+            await knex("orders")
+                .where({ id: order.id })
+                .update({
+                    status: "available",
+                    pickup_location: releasePoint  // new pickup at drone's location
+                });
+
+            await knex("drones")
+                .where({ id: droneId })
+                .update({ status: "broken" });
+        }
 
         await knex("orders_drones")
             .where({ id: assignment.id })
@@ -66,9 +83,21 @@ export const releaseOrder = async (req: AuthRequest, res: Response): Promise<any
                 release_type: release_type
             });
 
-        await knex("drones")
-            .where({ id: droneId })
-            .update({ status: droneStatus });
+        await logActivity({
+            userId: user.id,
+            action: release_type === "delivered" ? "order.delivered" : "order.drone_broken_handoff",
+            entityType: "order",
+            entityId: order.id,
+            details: release_type === "delivered"
+                ? { drone_id: droneId, location }
+                : {
+                    drone_id: droneId,
+                    drone_broken: true,
+                    order_made_available: true,
+                    new_pickup_location: location
+                },
+            req
+        });
 
         res.status(200).json({
             message: release_type === "delivered" ? "Order delivered successfully" : "Order released due to drone failure",

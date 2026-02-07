@@ -1,0 +1,652 @@
+{
+  "info": {
+    "name": "drones",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/auth",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "auth"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"drone1\",\n  \"password\": \"123456789\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Drones",
+      "item": [
+        {
+          "name": "Available Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{drone1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/drones/available_orders",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "drones",
+                "available_orders"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Update Location",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{drone1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/drones/location",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "drones",
+                "location"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"location\": {\n    \"lat\": 15.15646,\n    \"lng\": 65.51654\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List Drones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{admin1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/drones",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "drones"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get Drone",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{admin1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/drones/1",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "drones",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Update Drone",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{admin1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/drones/1",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "drones",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"available\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{user1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup_location\": {\n    \"lat\": 26.234626,\n    \"lng\": 50.552847\n  },\n  \"dropoff_location\": {\n    \"lat\": 26.269715,\n    \"lng\": 50.626022\n  },\n  \"pickup_address\": \"123, test highway, Manama, Bahrain\",\n  \"dropoff_address\": \"456, some road, Bahrain\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Withdraw Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{user1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders/cf643dea-80a7-44ca-a1ca-abf2e0b8faae/withdraw",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders",
+                "cf643dea-80a7-44ca-a1ca-abf2e0b8faae",
+                "withdraw"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Reserve Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{drone1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders/93d60590-7edb-45e2-8c6b-cd00310d71b9/reserve",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders",
+                "93d60590-7edb-45e2-8c6b-cd00310d71b9",
+                "reserve"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Pickup Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{drone1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders/93d60590-7edb-45e2-8c6b-cd00310d71b9/pickup",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders",
+                "93d60590-7edb-45e2-8c6b-cd00310d71b9",
+                "pickup"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Release Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{drone1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders/27f8414d-c8e3-4f11-81c5-821b20eee655/release",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders",
+                "27f8414d-c8e3-4f11-81c5-821b20eee655",
+                "release"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"release_type\": \"delivered\",\n  \"location\": {\n    \"lat\": 51.5454984,\n    \"lng\": 54.45456\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{user1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders/3cc3dba5-88a7-4b95-b947-68fb021ffe0b",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders",
+                "3cc3dba5-88a7-4b95-b947-68fb021ffe0b"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Update Order",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{admin1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders/24",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders",
+                "24"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup_location\": {\n    \"lat\": 26.234626,\n    \"lng\": 50.552847\n  },\n  \"dropoff_location\": {\n    \"lat\": 26.269715,\n    \"lng\": 50.626022\n  },\n  \"pickup_address\": \"555, test highway, Manama, Bahrain\",\n  \"dropoff_address\": \"456, some road, Bahrain\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{admin1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/orders",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "orders"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{admin1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/users",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"drone1\",\n  \"name\": \"Drone 1\",\n  \"password\": \"123456789\",\n  \"role\": \"drone\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get User (me)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "{{admin1_token}}",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/users/me",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MDI4ODY3NSwiZXhwIjoxNzcwODkzNDc1fQ.YUWRMdfjVXMdJpqNDNV_r5LQwggzy5odRp_b4etkAxI",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/users/5",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "users",
+                "5"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "auth": {
+              "type": "bearer",
+              "bearer": {
+                "key": "token",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MDI4ODY3NSwiZXhwIjoxNzcwODkzNDc1fQ.YUWRMdfjVXMdJpqNDNV_r5LQwggzy5odRp_b4etkAxI",
+                "type": "string"
+              }
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/users/1",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Administrator\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "api_url",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "drone1_token",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "admin1_token",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "user1_token",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "order_id_or_uuid",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

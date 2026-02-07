@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { body } from "express-validator";
 import { comparePassword } from "../../utils/password";
 import { validate } from "../../middleware/validate";
+import { logActivity } from "../../utils/activity_log";
 
 const router = Router();
 
@@ -38,6 +39,14 @@ router.post(
                 JWT_SECRET,
                 { expiresIn: JWT_EXPIRES_IN }
             );
+
+            await logActivity({
+                userId: user.id,
+                action: "auth.login",
+                entityType: "user",
+                entityId: user.id,
+                req
+            });
 
             res.json({
                 token,

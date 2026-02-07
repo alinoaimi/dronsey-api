@@ -1,14 +1,16 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
+import { AuthRequest } from "../../middleware/auth";
 import { param, body } from "express-validator";
 import knex from "../../db";
 import { getDrone } from "../../utils/formatters";
+import { logActivity } from "../../utils/activity_log";
 
 export const updateDroneValidation = [
     param("id").isInt().withMessage("Invalid drone ID"),
     body("status").optional().isIn(["available", "broken", "busy"]).withMessage("Status must be one of: available, broken, busy")
 ];
 
-export const updateDroneHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const updateDroneHandler = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const droneId = parseInt(req.params.id as string);
         const { status } = req.body;
@@ -26,6 +28,15 @@ export const updateDroneHandler = async (req: Request, res: Response, next: Next
 
         // Fetch updated drone using getDrone
         const drone = await getDrone(droneId);
+
+        await logActivity({
+            userId: req.user?.id,
+            action: "drone.update",
+            entityType: "drone",
+            entityId: droneId,
+            details: status !== undefined ? { status } : {},
+            req
+        });
 
         res.json({ drone });
     } catch (error) {
